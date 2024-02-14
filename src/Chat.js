@@ -2,26 +2,25 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import './Chat.css'; // Import a CSS file for styling
 
-const socket = io('http://localhost:5000'); // Connect to the server
+const socket = io('http://localhost:5000'); 
 
 const Chat = () => {
   const [message, setMessage] = useState('');
   const [username, setUsername] = useState('');
   const [chat, setChat] = useState([]);
-  const userColors = {}; // Store user colors outside the component state
+  const userColors = {}; 
 
   useEffect(() => {
-    // Listen for incoming messages from the server
+    
     socket.on('message', (message) => {
       setChat((prevChat) => [...prevChat, message]);
 
-      // Store the user's color in the userColors object
       if (!userColors[message.user]) {
         userColors[message.user] = getRandomColor();
       }
     });
 
-    // Cleanup socket connection when the component unmounts
+    
     return () => {
       socket.disconnect();
     };
@@ -49,16 +48,16 @@ const Chat = () => {
       const data = {
         user: username,
         content: message,
-        color: getUserColor(username), // Assign color based on username
+        color: getUserColor(username), 
       };
 
-      // Emit the message to the server
+  
       socket.emit('message', data);
 
-      // Add the user's own message to the chat display
+      
       setChat((prevChat) => [...prevChat, data]);
 
-      // Clear the message input
+      
       setMessage('');
     }
   };
